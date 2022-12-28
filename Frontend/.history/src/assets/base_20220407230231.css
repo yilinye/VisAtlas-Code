@@ -1,0 +1,56 @@
+body {
+  
+  margin: 0%;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+}
+
+
+#titleBar {
+  background: rgb(181, 181, 181);
+  height: 30px;
+  width: calc(100% + 0px);
+  border-radius: 4px 4px 0px 0px;
+  /* border: solid 1px; */
+  transform: translate(0px);
+  text-align: center;
+  color: white;
+  font-size: 20px;
+}
+
+
+/*chrome--------------------------------------------start*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(201, 201, 202);
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(162, 162, 163);
+}
+
+.el-menu::-webkit-scrollbar,
+.el-table__body-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.el-menu:hover::-webkit-scrollbar,
+.el-table__body-wrapper:hover::-webkit-scrollbar {
+  display: block;
+}
+
+/*chrome--------------------------------------------end*/

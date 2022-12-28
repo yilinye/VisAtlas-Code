@@ -1,0 +1,137 @@
+<!--
+ * @Author: Qing Shi
+ * @LastEditTime: 2022-04-09 22:02:24
+ * @Knowledge: 
+ * @Description: 
+ * @Attention: 
+-->
+<template>
+  <div id="titleBar">
+    {{ viewName }}
+  </div>
+  <div id="mainHistogram">
+    <div
+      v-for="(ty, index) in typeName"
+      :key="ty"
+      :id="'His' + ty"
+      v-bind:style="{ border: 'solid 1px', width: wd, height:hs, position: 'absolute', left: '2px', transform: 'translate(' + (index == 10 ? 'calc(50% + 5px)' : index % 2 ? 'calc(100% + 5px)' : '0') + ',' + 'calc(' + ((Math.floor(index / 2)) * 100) + '% + ' + ((Math.floor(index / 2)) * 3) + 'px' + ' + 5px)' + ')' }"
+    >
+
+    </div>
+  </div>
+</template>
+
+<script>
+// import * as d3 from d3;
+export default {
+  mounted () {
+    this.typeName.forEach(d => {
+      this.createSVG(d);
+    })
+  },
+  data () {
+    return {
+      viewName: "Embedding Histogram",
+      typeName: ["Area", "Bar", "Circle", "Diagram", "Line", "Map", "Matrix", "Net", "Point", "Table", "Word"],
+      hs: "calc(16.6% - 11px)",
+      wd: "calc(50% - 7px)"
+    };
+  },
+  methods: {
+    createSVG: function (hisType) {
+      const hisHeight = document.getElementById(('His' + hisType)).offsetHeight;
+      const hisWidth = document.getElementById(('His' + hisType)).offsetWidth;
+      d3.select('#His' + hisType)
+        .append('svg')
+        .attr('id', hisType + 'Svg')
+        .attr('width', hisWidth)
+        .attr('height', hisHeight)
+      d3.select('#' + hisType + 'Svg')
+        .append('text')
+        .text(hisType)
+        .attr('font-size', 15)
+        .attr('text-anchor', 'middle')
+        .attr('y', 15)
+        .attr('x', hisWidth / 2)
+    },
+    /**
+     * @description: data processing and use function
+     * @param {String} filePath: which file will be used, selected in modelView.vue
+     * @param {String} hisType: which feature will be drew
+     * @return {*}
+     */
+    drawHistogram: function (filePath, hisType) {
+      d3.csv(filePath).then((fileData) => {
+        // index name need small letters
+        let hisTag = hisType.toLowerCase();
+        const hisData = new Object();
+        for (let i = 0; i < fileData.length; ++i) {
+          let indexNum = Math.floor(parseFloat(fileData[i][hisTag]) * 10);
+          if (indexNum == 10) indexNum--; // let 1 to 0.9 ~ 1
+          if (indexNum == 0) continue;
+          if (typeof (hisData[indexNum]) == 'undefined') {
+            hisData[indexNum] = { cnt: 0, items: [] };
+          }
+          hisData[indexNum].cnt++;
+          hisData[indexNum].items.push(fileData[i]);
+        }
+        this.drawRectAndAxis(hisData, hisType);
+      })
+    },
+    drawRectAndAxis: function (hisData, hisType) {
+      const hisHeight = document.getElementById(('His' + this.uniID)).offsetHeight;
+      const hisWidth = document.getElementById(('His' + this.uniID)).offsetWidth;
+      // remove old View
+      d3.select("#his_g_" + hisType).remove();
+      // define new View
+      const his_g = d3.select("#" + hisType + "Svg")
+        .append('g')
+        .attr("id", "his_g_" + hisType);
+
+      const hisArray = new Array();
+      for (let i in hisData)
+        hisArray.push(hisData[i].cnt);
+
+      const xAxis = d3.scaleLinear()
+        .domain([0.1, 1.0])
+        .range([0, hisWidth - 45])
+      const yAxis = d3.scaleLinear()
+        .domain([0, d3.max(hisArray)])
+        .range([hisHeight - 40, 0]);
+
+      his_g.append('g')
+        .selectAll("#hisRect" + hisType)
+        .attr('id', "hisRect" + hisType)
+        .data(hisArray)
+        .enter()
+        .append('rect')
+        .attr('x', (d, i) => {
+          return xAxis((i + 1) / 10) + 38;
+        })
+        .attr('y', (d, i) => {
+          return yAxis(d) + 20;
+        })
+        .attr('height', d => {
+          return hisHeight - 40 - yAxis(d)
+        })
+        .attr('width', 12)
+        .attr('fill', "rgb(198, 198, 198)");
+      // draw Axis
+      his_g.append('g')
+        .call(d3.axisBottom(xAxis).ticks(5))
+        .attr("transform", `translate(${35}, ${hisHeight - 20})`);
+      his_g.append('g')
+        .call(d3.axisLeft(yAxis).ticks(5))
+        .attr("transform", `translate(${35}, ${20})`);
+    }
+  }
+}
+</script>
+
+<style>
+#mainHistogram {
+  height: calc(100% - 30px);
+  width: calc(100%);
+  /* background-color: #000; */
+}
+</style>
