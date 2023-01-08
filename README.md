@@ -35,6 +35,7 @@ pip install -r requirements.txt -i https://pypi.douban.com/simple
 imdb_vis30k.zip
 imdb_Beagle.zip
 data2vis_imdb.zip
+download link https://drive.google.com/drive/folders/1jBBQm_Yi8ri9NFGW33Wyp9eazc_ZMjhr?usp=sharing
 ```
 ### File Path
 You need to put `imdb_vis30k`, `imdb_Beagle` and `data2vis_imdb` in `/Frontend/src/assets/static/`.
