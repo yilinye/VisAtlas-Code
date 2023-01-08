@@ -1,0 +1,6 @@
+tensorflow==2.8.0
+numpy==1.21.6
+Flask_Cors==3.0.6
+pandas==0.23.4
+Flask==2.1.1
+Pillow==9.1.0
