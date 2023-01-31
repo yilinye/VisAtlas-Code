@@ -8,8 +8,8 @@
 # VisAtlas
 
 ![image](https://github.com/sqsssq/VisAtlas/blob/main/others/sys220501.png)
-
-VisAtlas is an image-based approach empowered by neural image embedding, which can facilitate exploration and query for visualization collections. 
+This is the code for our paper **VISAtlas: An Image-based Exploration and Query System for Large Visualization Collections via Neural Image Embedding** https://ieeexplore.ieee.org/abstract/document/9984953
+VISAtlas is an image-based approach empowered by neural image embedding, which can facilitate exploration and query for visualization collections. 
 This system based on 3 different sources, Beagle(real-world visualization collection), VIS30K(real-world visualization collection) and Data2Vis(synthetic collection).
 And we train a CNN model for taxonomical classification of visualizations.
 ## Installation
